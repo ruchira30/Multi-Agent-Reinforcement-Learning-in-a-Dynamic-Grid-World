@@ -13,7 +13,7 @@ This project demonstrates multi-agent reinforcement learning (MARL) in a dynamic
 - PPO with a clipped surrogate objective ensures stable policy updates.
 
 # Training and Evaluation
-- Trained for 1200 episodes with 15 steps per episode.
+- Trained for 900 episodes with 20 steps per episode.
 - Reward structure includes goal bonuses, collision penalties, and step penalties to promote efficient cooperative behavior.
 - Evaluated over 100 episodes measuring success rate, collisions, average distance to goal, and steps to goal.
 - Generates an image visualizing agent trajectories and dynamic obstacles.
@@ -28,8 +28,4 @@ This project demonstrates multi-agent reinforcement learning (MARL) in a dynamic
 - Average Collisions per Episode
 - Average Steps to Goal
 
-<img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/405ebbdd-f07b-4f28-acd9-775add91f989" />
-
-
-# Visualization:
 
