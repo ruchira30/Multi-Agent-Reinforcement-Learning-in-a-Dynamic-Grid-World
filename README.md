@@ -13,7 +13,7 @@ This project implements a multi-agent reinforcement learning (MARL) environment 
 - PPO is used to update policies with clipped surrogate objective for stable training.
 
 # Training and Evaluation:
-- Trained for 900 episodes with 20 steps per episode.
+- Trained for 900 episodes with 15 steps per episode.
 - Agents learn to optimize average reward, minimize collisions, and efficiently reach the goal.
 - Evaluated over 100 episodes measuring success rate, collisions, steps to goal, and distance to goal.
 - Generates a GIF visualizing agent trajectories and dynamic obstacles during evaluation.
