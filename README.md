@@ -27,6 +27,7 @@ This project implements a multi-agent reinforcement learning (MARL) environment 
       - Average Collisions per Episode
       - Average Steps to Goal
 
+
 # Visualization:
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/875fea20-8346-463f-970f-b6a29b52de79" />
+![MARL Demo](marl_simple_outputs/marl_demo.gif)
 
