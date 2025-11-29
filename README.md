@@ -3,7 +3,7 @@ This project demonstrates multi-agent reinforcement learning (MARL) in a dynamic
 
 # Key Features
 # Grid Environment
-- 12x12 grid world with a shared goal.
+- 10x10 grid world with a shared goal.
 - Randomly moving obstacles introduce stochasticity and learning challenges.
 - Local observations capture nearby agents, obstacles within a radius, and relative goal position.
 
@@ -13,7 +13,7 @@ This project demonstrates multi-agent reinforcement learning (MARL) in a dynamic
 - PPO with a clipped surrogate objective ensures stable policy updates.
 
 # Training and Evaluation
-- Trained for 1200 episodes with 20 steps per episode.
+- Trained for 1200 episodes with 15 steps per episode.
 - Reward structure includes goal bonuses, collision penalties, and step penalties to promote efficient cooperative behavior.
 - Evaluated over 100 episodes measuring success rate, collisions, average distance to goal, and steps to goal.
 - Generates an image visualizing agent trajectories and dynamic obstacles.
