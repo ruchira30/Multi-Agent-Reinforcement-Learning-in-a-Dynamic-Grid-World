@@ -26,6 +26,8 @@ This project implements a multi-agent reinforcement learning (MARL) environment 
       - Average Distance to Goal
       - Average Collisions per Episode
       - Average Steps to Goal
+  
+<img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/405ebbdd-f07b-4f28-acd9-775add91f989" />
 
 
 # Visualization:
