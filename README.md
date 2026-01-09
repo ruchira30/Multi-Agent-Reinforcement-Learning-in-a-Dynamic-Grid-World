@@ -1,36 +1,36 @@
-## Multi-Agent Reinforcement Learning in a Dynamic Gridworld
+# Multi-Agent Reinforcement Learning in a Dynamic Gridworld
 
 This project implements a cooperative Multi-Agent Reinforcement Learning (MARL) system in a dynamic gridworld using Proximal Policy Optimization (PPO). Multiple agents learn to coordinate their movements toward a shared goal while avoiding collisions and stochastically moving obstacles.The learning setup follows a centralized critic with decentralized actors, enabling stable cooperative learning under partial observability and environmental uncertainty.
 
-# Environment
+## Environment
 - 11×11 grid world with a fixed shared goal at the top-right corner.
 - Two cooperative agents initialized at random positions.
 - Dynamic obstacles that move stochastically at each timestep.
 
-# Partial observability:
+## Partial observability:
 - Each agent observes a local 3×3 neighborhood encoding nearby agents and obstacles.
 - Includes a normalized relative vector to the global goal.
 
-# Discrete action space (5 actions):
+## Discrete action space (5 actions):
 
 Up, Down, Left, Right, Stay.
 
-# Learning Architecture
+## Learning Architecture
 
-# A.Decentralized Actors:
+### A.Decentralized Actors:
 - Each agent is controlled by an independent neural network policy.
 - Policies operate only on local observations at execution time.
 
-# B.Centralized Critic:
+### B.Centralized Critic:
 - A shared value function receives the concatenated observations of all agents.
 - Provides a global estimate of team value to stabilize learning.
 
-# Proximal Policy Optimization (PPO):
+## Proximal Policy Optimization (PPO):
 - Clipped surrogate objective for robust policy updates.
 - Multiple PPO epochs per rollout.
 - Entropy regularization encourages exploration.
 
-# Reward Design
+## Reward Design
 A hybrid cooperative reward structure is used:
 - Dense shaping reward based on average agent distance to the goal.
 - Sparse cooperative bonus when all agents reach the goal region.
@@ -39,7 +39,7 @@ A hybrid cooperative reward structure is used:
 
 This reward formulation balances learning speed with coordinated behavior.
 
-# Training
+## Training
 - 900 training episodes
 - 20 steps per episode
 - Discount factor: γ = 0.995
@@ -47,7 +47,7 @@ This reward formulation balances learning speed with coordinated behavior.
 - Framework: PyTorch
 - Hardware support: CPU / CUDA GPU
 
-# Evaluation & Visualization
+## Evaluation & Visualization
   Quantitative Metrics
   During evaluation, the following metrics are reported:
   - Average Episode Reward
@@ -56,7 +56,7 @@ This reward formulation balances learning speed with coordinated behavior.
   - Average Collisions per Episode
   - Average Steps per Episode
 
-# Qualitative Visualization
+## Qualitative Visualization
 Generates animated GIFs showing:
 - Agent trajectories
 - Dynamic obstacle movements
