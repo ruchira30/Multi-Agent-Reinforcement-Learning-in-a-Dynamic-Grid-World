@@ -17,11 +17,11 @@ Up, Down, Left, Right, Stay.
 
 # Learning Architecture
 
-# Decentralized Actors:
+# A.Decentralized Actors:
 - Each agent is controlled by an independent neural network policy.
 - Policies operate only on local observations at execution time.
 
-# Centralized Critic:
+# B.Centralized Critic:
 - A shared value function receives the concatenated observations of all agents.
 - Provides a global estimate of team value to stabilize learning.
 
