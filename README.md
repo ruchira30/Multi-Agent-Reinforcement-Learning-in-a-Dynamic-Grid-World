@@ -1,33 +1,71 @@
-# Multi-Agent Reinforcement Learning in a Dynamic Gridworld
+## Multi-Agent Reinforcement Learning in a Dynamic Gridworld
 
-This project demonstrates multi-agent reinforcement learning (MARL) in a dynamic 10×10 grid world, where multiple agents collaboratively navigate toward a shared goal while avoiding collisions and moving obstacles. Agents learn cooperative strategies using Proximal Policy Optimization (PPO) with independent actor networks and a centralized critic, enabling stable learning in partially observable, stochastic environments.
+This project implements a cooperative Multi-Agent Reinforcement Learning (MARL) system in a dynamic gridworld using Proximal Policy Optimization (PPO). Multiple agents learn to coordinate their movements toward a shared goal while avoiding collisions and stochastically moving obstacles.The learning setup follows a centralized critic with decentralized actors, enabling stable cooperative learning under partial observability and environmental uncertainty.
 
-# Features
-## Environment
-- 10×10 grid world with a shared goal.
-- Randomly moving obstacles introduce stochasticity and dynamic challenges.
-- Local observations capture nearby agents, obstacles, and relative goal positions.
-## Learning Architecture
-- Independent actor networks for decentralized execution.
-- Centralized critic evaluating joint states to stabilize cooperative learning.
-- PPO with clipped surrogate objective for stable policy updates.
+# Environment
+- 11×11 grid world with a fixed shared goal at the top-right corner.
+- Two cooperative agents initialized at random positions.
+- Dynamic obstacles that move stochastically at each timestep.
 
-## Rewards
-- Sparse & dynamic rewards: agents receive rewards for reaching the goal and penalties for collisions.
-- Optional step penalty encourages efficient navigation.
+# Partial observability:
+- Each agent observes a local 3×3 neighborhood encoding nearby agents and obstacles.
+- Includes a normalized relative vector to the global goal.
 
-## Training
-- Trained for 900 episodes with 20 steps per episode.
-- Supports GPU acceleration via PyTorch.
+# Discrete action space (5 actions):
 
-## Evaluation & Visualization
+Up, Down, Left, Right, Stay.
 
-Metrics:
-- Average Reward
-- Success Rate
-- Average Distance to Goal
-- Average Collisions per Episode
+# Learning Architecture
 
-Average Steps to Goal
+# Decentralized Actors:
+- Each agent is controlled by an independent neural network policy.
+- Policies operate only on local observations at execution time.
 
-Generates trajectory GIFs showing agent paths and dynamic obstacles.
+# Centralized Critic:
+- A shared value function receives the concatenated observations of all agents.
+- Provides a global estimate of team value to stabilize learning.
+
+# Proximal Policy Optimization (PPO):
+- Clipped surrogate objective for robust policy updates.
+- Multiple PPO epochs per rollout.
+- Entropy regularization encourages exploration.
+
+# Reward Design
+A hybrid cooperative reward structure is used:
+- Dense shaping reward based on average agent distance to the goal.
+- Sparse cooperative bonus when all agents reach the goal region.
+- Collision penalty when agents occupy the same grid cell.
+- Small step penalty to promote efficient navigation.
+
+This reward formulation balances learning speed with coordinated behavior.
+
+# Training
+- 900 training episodes
+- 20 steps per episode
+- Discount factor: γ = 0.995
+- Optimizer: Adam (actors and critic)
+- Framework: PyTorch
+- Hardware support: CPU / CUDA GPU
+
+# Evaluation & Visualization
+  Quantitative Metrics
+  During evaluation, the following metrics are reported:
+  - Average Episode Reward
+  - Success Rate (all agents reach the goal)
+  - Average Distance to Goal
+  - Average Collisions per Episode
+  - Average Steps per Episode
+
+# Qualitative Visualization
+Generates animated GIFs showing:
+- Agent trajectories
+- Dynamic obstacle movements
+- Goal location
+
+Useful for inspecting coordination and emergent behaviors.
+
+## Key Highlights
+- Centralized training with decentralized execution (CTDE)
+- Cooperative PPO in a stochastic, partially observable environment
+- Dynamic obstacles introduce non-stationarity
+- Clear visualization of learned multi-agent coordination
