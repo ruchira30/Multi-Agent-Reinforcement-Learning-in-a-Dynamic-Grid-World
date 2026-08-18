@@ -1,71 +1,174 @@
-# Multi-Agent Reinforcement Learning in a Dynamic Gridworld
+# Multi-Agent Reinforcement Learning with PPO
 
-This project implements a cooperative Multi-Agent Reinforcement Learning (MARL) system in a dynamic gridworld using Proximal Policy Optimization (PPO). Multiple agents learn to coordinate their movements toward a shared goal while avoiding collisions and stochastically moving obstacles.The learning setup follows a centralized critic with decentralized actors, enabling stable cooperative learning under partial observability and environmental uncertainty.
+A **Multi-Agent Reinforcement Learning (MARL)** project that trains multiple agents to cooperatively navigate a dynamic grid environment using **Proximal Policy Optimization (PPO)** with decentralized actors and a centralized critic.
+
+## Overview
+
+This project implements a cooperative multi-agent navigation environment in which two agents learn to reach a common goal while navigating obstacles.
+
+The environment includes:
+
+* An `11 × 11` grid world
+* 2 cooperative agents
+* Stochastically moving obstacles
+* Local observations for each agent
+* A shared goal location
+* Collision penalties
+* Dense distance-based reward shaping
+* Cooperative terminal reward
+
+The agents are trained using **PPO** with separate actor networks and a centralized critic.
 
 ## Environment
-- 11×11 grid world with a fixed shared goal at the top-right corner.
-- Two cooperative agents initialized at random positions.
-- Dynamic obstacles that move stochastically at each timestep.
 
-## Partial observability:
-- Each agent observes a local 3×3 neighborhood encoding nearby agents and obstacles.
-- Includes a normalized relative vector to the global goal.
+Each agent receives a local observation consisting of:
 
-## Discrete action space (5 actions):
+* A local `3 × 3` grid around the agent
+* Relative position of the goal
 
-Up, Down, Left, Right, Stay.
+Agents can perform five actions:
 
-## Learning Architecture
+* Move right
+* Move left
+* Move up
+* Move down
+* Stay
 
-### A.Decentralized Actors:
-- Each agent is controlled by an independent neural network policy.
-- Policies operate only on local observations at execution time.
+Obstacles can move stochastically during the episode, creating a dynamic environment.
 
-### B.Centralized Critic:
-- A shared value function receives the concatenated observations of all agents.
-- Provides a global estimate of team value to stabilize learning.
+## Reward Function
 
-## Proximal Policy Optimization (PPO):
-- Clipped surrogate objective for robust policy updates.
-- Multiple PPO epochs per rollout.
-- Entropy regularization encourages exploration.
+The environment uses a hybrid reward consisting of:
 
-## Reward Design
-A hybrid cooperative reward structure is used:
-- Dense shaping reward based on average agent distance to the goal.
-- Sparse cooperative bonus when all agents reach the goal region.
-- Collision penalty when agents occupy the same grid cell.
-- Small step penalty to promote efficient navigation.
+* **Dense reward** based on distance to the goal
+* **+5.0 cooperative reward** when both agents reach the goal
+* **−1.0 collision penalty**
+* **−0.005 step penalty**
 
-This reward formulation balances learning speed with coordinated behavior.
+This encourages the agents to reach the shared goal efficiently while avoiding collisions.
+
+## MARL Architecture
+
+The project follows a **centralized-critic, decentralized-actor** setup.
+
+### Actor Networks
+
+Each agent has its own policy network:
+
+```text
+Local Observation
+       ↓
+   Linear (64)
+       ↓
+      ReLU
+       ↓
+   Linear (32)
+       ↓
+      ReLU
+       ↓
+  Action Logits
+```
+
+Each actor selects from the five available actions.
+
+### Centralized Critic
+
+The critic receives the observations of both agents:
+
+```text
+Combined Agent Observations
+          ↓
+      Linear (128)
+          ↓
+         ReLU
+          ↓
+       Linear (64)
+          ↓
+         ReLU
+          ↓
+        Value
+```
+
+The centralized critic estimates the value of the joint multi-agent state.
 
 ## Training
-- 900 training episodes
-- 20 steps per episode
-- Discount factor: γ = 0.995
-- Optimizer: Adam (actors and critic)
-- Framework: PyTorch
-- Hardware support: CPU / CUDA GPU
 
-## Evaluation & Visualization
-  Quantitative Metrics
-  During evaluation, the following metrics are reported:
-  - Average Episode Reward
-  - Success Rate (all agents reach the goal)
-  - Average Distance to Goal
-  - Average Collisions per Episode
-  - Average Steps per Episode
+The agents are trained using **Proximal Policy Optimization (PPO)**.
 
-## Qualitative Visualization
-Generates animated GIFs showing:
-- Agent trajectories
-- Dynamic obstacle movements
-- Goal location
+Key training configuration:
 
-Useful for inspecting coordination and emergent behaviors.
+| Parameter            |    Value |
+| -------------------- | -------: |
+| Grid Size            |  11 × 11 |
+| Number of Agents     |        2 |
+| Episodes             |      900 |
+| Steps / Episode      |       20 |
+| Discount Factor (γ)  |    0.995 |
+| PPO Epochs           |        4 |
+| PPO Clip             |      0.2 |
+| Actor Learning Rate  | 3 × 10⁻⁴ |
+| Critic Learning Rate | 3 × 10⁻⁴ |
+| Entropy Coefficient  |     0.01 |
 
-## Key Highlights
-- Centralized training with decentralized execution (CTDE)
-- Cooperative PPO in a stochastic, partially observable environment
-- Dynamic obstacles introduce non-stationarity
-- Clear visualization of learned multi-agent coordination
+Advantage estimates are normalized before the actor updates, and the critic is trained using mean squared error against the computed returns.
+
+## Evaluation
+
+The trained policies are evaluated over **100 episodes**, with up to 30 steps per episode.
+
+The evaluation tracks:
+
+* Average reward
+* Success rate
+* Average distance to goal
+* Average collisions per episode
+* Average steps per episode
+
+### Evaluation Results
+
+| Metric                       | Result |
+| ---------------------------- | -----: |
+| Average Reward               |  3.589 |
+| Success Rate                 |    21% |
+| Average Distance to Goal     |  1.402 |
+| Average Collisions / Episode |  0.830 |
+| Average Steps / Episode      | 30.000 |
+
+A trajectory visualization is also generated as a GIF to illustrate agent movement, obstacle positions, and the shared goal.
+
+## Visualization
+
+The evaluation generates a grid-world animation showing:
+
+* Agent trajectories
+* Agent positions
+* Moving obstacles
+* Goal location
+
+The resulting demonstration is saved as:
+
+`marl_outputs/marl_demo.gif`
+
+## Tech Stack
+
+**Language:** Python
+
+**Framework:** PyTorch
+
+**Libraries:** NumPy, Matplotlib, ImageIO, tqdm
+
+**Methods:** Multi-Agent Reinforcement Learning, PPO, Actor-Critic, Policy Gradient, Advantage Estimation
+
+## Future Work
+
+* Improve cooperative success rate through additional training and hyperparameter tuning.
+* Experiment with centralized training and decentralized execution more explicitly.
+* Explore alternative reward designs for stronger collision avoidance.
+* Compare PPO with other multi-agent reinforcement learning algorithms.
+* Introduce more agents and larger environments.
+* Evaluate performance under different obstacle dynamics.
+* Add systematic training curves and comparative experiments.
+
+## Author
+
+**Ruchira Purohit**
